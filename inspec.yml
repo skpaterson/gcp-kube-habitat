@@ -1,0 +1,14 @@
+name: gcp-kube-habitat-tests
+title: InSpec GCP Kube Habitat Tests 
+maintainer: Stuart Paterson
+copyright: Stuart Paterson
+copyright_email: spaterson@chef.io
+license: MPL-2.0
+summary: InSpec GCP Tests for Kubernetes Cluster Creation
+version: 0.1.0
+inspec_version: '>= 2.2.10'
+depends:
+  - name: inspec-gcp
+    url: https://github.com/inspec/inspec-gcp/archive/master.tar.gz 
+supports:
+  - platform: gcp

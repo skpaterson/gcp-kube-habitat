@@ -1,0 +1,23 @@
+apiVersion: habitat.sh/v1beta1
+kind: Habitat
+metadata:
+  name: habitat-demo-counter
+spec:
+  image: kinvolk/habitat-demo-counter
+  count: 1
+  service:
+    topology: standalone
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: front
+spec:
+  selector:
+    habitat-name: habitat-demo-counter
+  type: LoadBalancer
+  ports:
+  - name: web
+    targetPort: 8000
+    port: 8000
+    protocol: TCP
