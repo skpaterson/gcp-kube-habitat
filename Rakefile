@@ -84,13 +84,15 @@ namespace :test do
     cmd = format("gcloud container clusters get-credentials %s --zone %s --project %s",GcpConfig.config[:gcp_kube_cluster_name],GcpConfig.config[:gcp_zone],GcpConfig.config[:gcp_project_id])
     sh(cmd)
     puts "----> Ensure current user can administer cluster"
-    # allow to run this repeatedly without errors e.g. deliberately swallow -> Error from server (AlreadyExists): clusterrolebindings.rbac.authorization.k8s.io "cluster-admin-binding" already exists
-    cmd = "kubectl create clusterrolebinding cluster-admin-binding --clusterrole cluster-admin --user $(gcloud config get-value account); rc=$?; if [ $rc -eq 0 ] || [ $rc -eq 1 ]; then exit 0; else exit 1; fi"
+    cmd = "kubectl create clusterrolebinding cluster-admin-binding --clusterrole cluster-admin --user $(gcloud config get-value account)"
     sh(cmd)
     puts "----> Applying custom Habitat RBAC settings"
     cmd = "kubectl apply -f setup/rbac-habitat.yml"
     sh(cmd)
     cmd = "kubectl create clusterrolebinding default-hab-binding --clusterrole=habitat-operator --serviceaccount=default:default"
+    sh(cmd)
+    puts "----> Installing Habitat Operator on Kubernetes"
+    cmd = "kubectl apply -f setup/habitat_operator.yml"
     sh(cmd)
   end
 
