@@ -88,7 +88,7 @@ namespace :test do
     cmd = "kubectl create clusterrolebinding cluster-admin-binding --clusterrole cluster-admin --user $(gcloud config get-value account); rc=$?; if [ $rc -eq 0 ] || [ $rc -eq 1 ]; then exit 0; else exit 1; fi"
     sh(cmd)
     puts "----> Applying custom Habitat RBAC settings"
-    cmd = "kubectl apply -f setup/rbac_habitat.yml"
+    cmd = "kubectl apply -f setup/rbac-habitat.yml"
     sh(cmd)
     cmd = "kubectl create clusterrolebinding default-hab-binding --clusterrole=habitat-operator --serviceaccount=default:default"
     sh(cmd)
