@@ -81,7 +81,7 @@ namespace :test do
   task :setup_cluster do
     GcpConfig.update_from_environment
     puts "----> Getting credentials for kube cluster"
-    cmd = format("gcloud container clusters get-credentials %s --zone %s --project %s",GcpConfig.config[:gcp_kube_cluster_name],GcpConfig.config[:gcp_zone],GcpConfig.config[:gcp_project_id])
+    cmd = format("gcloud container clusters get-credentials %s --zone %s --project %s",GcpConfig.config[:gcp_kube_cluster_name],GcpConfig.config[:gcp_kube_cluster_zone],GcpConfig.config[:gcp_project_id])
     sh(cmd)
     puts "----> Ensure current user can administer cluster"
     cmd = "kubectl create clusterrolebinding cluster-admin-binding --clusterrole cluster-admin --user $(gcloud config get-value account)"

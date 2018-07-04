@@ -55,6 +55,8 @@ $ bundle install
 
 6. Install habitat, see instructions [here](https://github.com/habitat-sh/habitat#install)
 
+7. Install Terraform, ses instructions [here](https://www.terraform.io/intro/getting-started/install.html)
+
 ## Create the resources
 
 First, let's export an environment variable pointing at a GCP project ID of your choosing:
@@ -69,6 +71,7 @@ $ export GCP_KUBE_CLUSTER_ZONE="europe-west2-a"
 $ export GCP_KUBE_CLUSTER_ZONE_EXTRA1="europe-west2-b"
 $ export GCP_KUBE_CLUSTER_ZONE_EXTRA2="europe-west2-c"
 ```
+Choose a zone where there are enough IP addresses available (9 are required and some zones default to 8).  Navigate to  IAM and admin->Quotas and look for “Compute Engine API In-use IP addresses” to update this for a zone.
 
 Optionally create a service account for working with the container registry that could be used by Habitat Builder:
 ```
