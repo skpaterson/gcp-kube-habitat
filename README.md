@@ -70,9 +70,9 @@ This is the only mandatory setting.  If preferred, another approach would be to 
 
 Optionally choose the primary and two additional zones where the Kubernetes cluster will run.  Not setting anything will result in the default values shown below:
 ```bash
-$ export GCP_KUBE_CLUSTER_ZONE="europe-west2-a"
-$ export GCP_KUBE_CLUSTER_ZONE_EXTRA1="europe-west2-b"
-$ export GCP_KUBE_CLUSTER_ZONE_EXTRA2="europe-west2-c"
+$ export GCP_KUBE_CLUSTER_ZONE="europe-west1-d"
+$ export GCP_KUBE_CLUSTER_ZONE_EXTRA1="europe-west1-b"
+$ export GCP_KUBE_CLUSTER_ZONE_EXTRA2="europe-west1-c"
 ```
 Choose a zone where there are enough IP addresses available (9 are required and some zones default to 8).  Navigate to  IAM and admin->Quotas and look for “Compute Engine API In-use IP addresses” to update this for a zone.
 
@@ -169,8 +169,10 @@ $ kubectl get pods
 
 ## Run an example application directly using Kubernetes
 
+This is based on the Kubernetes example [here](https://kubernetes.io/docs/tasks/run-application/)
+
 ```
-$ kubectl apply -f https://k8s.io/examples/application/deployment.yaml
+$ kubectl apply -f applications/nginx-deployment.yml
 $ kubectl describe deployment nginx-deployment
 $ kubectl get pods
 $ kubectl expose deployment nginx-deployment --type=LoadBalancer --name=nginx-service
