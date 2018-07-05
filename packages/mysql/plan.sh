@@ -1,5 +1,5 @@
 pkg_name=mysql
-pkg_origin=core
+pkg_origin=$GCP_KUBE_HAB_PKG_ORIGIN
 pkg_version=5.7.21
 pkg_maintainer='The Habitat Maintainers <humans@habitat.sh>'
 pkg_license=('GPL-2.0')

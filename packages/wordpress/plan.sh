@@ -2,7 +2,7 @@
 # See full docs at https://www.habitat.sh/docs/reference/plan-syntax/
 
 pkg_name=wordpress
-pkg_origin=core
+pkg_origin=$GCP_KUBE_HAB_PKG_ORIGIN
 pkg_version="4.7.4"
 pkg_maintainer="The Habitat Maintainers <humans@habitat.sh>"
 pkg_license=('Apache-2.0')
