@@ -177,7 +177,7 @@ $ kubectl apply -f applications/nginx-deployment.yml
 $ kubectl describe deployment nginx-deployment
 $ kubectl get pods
 $ kubectl expose deployment nginx-deployment --type=LoadBalancer --name=nginx-service
-$ kubectl desribe services nginx-service 
+$ kubectl describe services nginx-service 
 ```
 Using the public IP address from the last command, hit the URL and the trusty nginx startup page should be there. 
 
