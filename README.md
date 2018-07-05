@@ -7,11 +7,7 @@ similar steps to this [AKS and ACR Walkthrough](https://www.habitat.sh/blog/2018
 - Uses [InSpec GCP](https://github.com/inspec/inspec-gcp) to test that the resources were created as expected, see [controls](controls)
 - Configures kubectl command line tool
 - Installs [Habitat Operator](https://github.com/habitat-sh/habitat-operator) to the Kubernetes cluster 
-- Provides example apps to quickly do something real in the cluster
-
-Below are work in progress:
-- Provides a script to use the service account to push habitat packages (`habitat/mysql` and `habitat/wordpress`) to the Container Registry
-- Provides a script to deploy a wordpress application that depends on the Container Registry images 
+- Provides examples to quickly do something real in the cluster
 
 ## Prerequisites
 
