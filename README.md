@@ -76,9 +76,9 @@ $ export GCP_KUBE_CLUSTER_ZONE_EXTRA2="europe-west1-c"
 ```
 Choose a zone where there are enough IP addresses available (9 are required and some zones default to 8).  Navigate to  IAM and admin->Quotas and look for “Compute Engine API In-use IP addresses” to update this for a zone.
 
-Optionally create a service account for working with the container registry that could be used by Habitat Builder:
+Optionally disable creating the service account for working with the container registry that could be used by Habitat Builder.  This is created by default:
 ```
-$ export CREATE_HABITAT_SERVICE_ACCOUNT=1
+$ export CREATE_HABITAT_SERVICE_ACCOUNT=0
 ```
 
 Initialize the terraform workspace:
@@ -160,6 +160,7 @@ The following command configures kubectl and installs the Habitat Operator in th
 ```
 $ bundle exec rake test:setup_cluster
 ```
+Note this operation is not idempotent!
 
 Check things are working as expected via:
 ```
@@ -205,13 +206,28 @@ NAME      TYPE           CLUSTER-IP     EXTERNAL-IP      PORT(S)          AGE
 front     LoadBalancer   10.20.300.40   12.345.678.123   8000:32259/TCP   1m
 ```
 
-
 ## Clean everything up 
 
 The below command cleans up the resources created with terraform.  There is no protection for anything running within the cluster, processes will be stopped.
 
 ```
 $ bundle exec rake test:cleanup_integration_tests
+```
+
+## FAQ
+
+### Quota increase for zone
+
+The terraform templates could generate sufficient resources to require an increase to default in_use IP addresses for a project or zone.
+
+To find this setting, log in to the GCP web interface and go to **IAM and admin->Quotas** and look for "Compute Engine API In-use IP addresses" for the project/zone.  From here you can "Edit quotas" to request more.
+```
+Changed Quota:
++----------------------+------------------+
+| Region: europe-west2 | IN_USE_ADDRESSES |
++----------------------+------------------+
+|       Changes        |     8 -> 64      |
++----------------------+------------------+
 ```
 
 ## License
