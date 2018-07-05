@@ -92,7 +92,7 @@ namespace :test do
     cmd = "kubectl create clusterrolebinding default-hab-binding --clusterrole=habitat-operator --serviceaccount=default:default"
     sh(cmd)
     puts "----> Installing Habitat Operator on Kubernetes"
-    cmd = "kubectl apply -f setup/habitat_operator.yml"
+    cmd = "kubectl apply -f setup/habitat-operator.yml"
     sh(cmd)
   end
 
