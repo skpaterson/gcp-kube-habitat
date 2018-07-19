@@ -93,14 +93,16 @@ namespace :test do
     puts "----> Ensure current user can administer cluster"
     cmd = "kubectl create clusterrolebinding cluster-admin-binding --clusterrole cluster-admin --user $(gcloud config get-value account)"
     sh(cmd)
-    puts "----> Applying custom Habitat RBAC settings"
-    cmd = "kubectl apply -f setup/rbac-habitat.yml"
-    sh(cmd)
-    cmd = "kubectl create clusterrolebinding default-hab-binding --clusterrole=habitat-operator --serviceaccount=default:default"
-    sh(cmd)
-    puts "----> Installing Habitat Operator on Kubernetes"
-    cmd = "kubectl apply -f setup/habitat-operator.yml"
-    sh(cmd)
+    puts "----> Setting up Helm ..."
+    setup_helm = File.join(File.dirname(__FILE__),'scripts','setup_helm.sh')
+    sh(setup_helm)
+    puts "----> Setting up Habitat ..."
+    setup_hab = File.join(File.dirname(__FILE__),'scripts','setup_habitat.sh')
+    sh(setup_hab)
+    puts "----> Setting up Service Catalog and GCP Broker ..."
+    setup_osb = File.join(File.dirname(__FILE__),'scripts','setup_service_catalog.sh')
+    sh(setup_osb)
+    puts "----> Cluster ready."
   end
 
   desc "Perform Integration Tests Without Cluster Configuration"
