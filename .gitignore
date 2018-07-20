@@ -13,3 +13,4 @@ local
 *.env
 *.tfvars
 *-attributes.yaml
+*applications/cleanup-mysql-svcat.sh*

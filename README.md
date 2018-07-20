@@ -56,9 +56,7 @@ $ bundle install
 
 7. Install Terraform, see instructions [here](https://www.terraform.io/intro/getting-started/install.html)
 
-8. Install the Service Catalog CLI, see: [here](https://github.com/kubernetes-incubator/service-catalog/blob/master/docs/install.md#installing-the-service-catalog-cli)
-
-9. Optionally, install Service Catalog, see instructions [here](https://cloud.google.com/kubernetes-engine/docs/how-to/add-on/service-catalog/install-service-catalog).  Confirm this is working via:
+8. Install Service Catalog, see instructions [here](https://cloud.google.com/kubernetes-engine/docs/how-to/add-on/service-catalog/install-service-catalog).  Confirm this is working via:
 
 ```bash
 $ sc check
@@ -67,6 +65,9 @@ project: spaterson-project
 zone:
 Dependency check passed. You are good to go.
 ```
+
+9. Install the Service Catalog CLI, see: [here](https://github.com/kubernetes-incubator/service-catalog/blob/master/docs/install.md#installing-the-service-catalog-cli)
+
 
 ## Create the resources
 
