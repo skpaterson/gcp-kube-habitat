@@ -30,6 +30,7 @@ resource "google_service_account" "habitat_container_service_account" {
 
 # grant this account sufficient privileges for container CRUD
 resource "google_project_iam_member" "project_storage_admin" {
+  count = "${var.create_habitat_service_account}"
   project = "${var.gcp_project_id}"
   role    = "roles/storage.admin"
   member  = "serviceAccount:${google_service_account.habitat_container_service_account.email}"
