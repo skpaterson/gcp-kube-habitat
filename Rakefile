@@ -71,13 +71,13 @@ namespace :test do
     sh(cmd)
   end
 
-  task :get_package_creds do
-    GcpConfig.update_from_environment
-    puts "----> Getting credentials for service account (note you must have the Service Account Key Admin role)"
-    cmd = format("gcloud iam service-accounts keys create ~/key%s.json --iam-account %s@%s.iam.gserviceaccount.com",GcpConfig.config[:hab_container_service_account_name],GcpConfig.config[:hab_container_service_account_name],GcpConfig.config[:gcp_project_id])
-    sh(cmd)
-    puts "Now run: docker login -u _json_key --password-stdin https://gcr.io < ~/key#{GcpConfig.config[:hab_container_service_account_name]}.json"
-  end
+  # task :get_package_creds do
+  #   GcpConfig.update_from_environment
+  #   puts "----> Getting credentials for service account (note you must have the Service Account Key Admin role)"
+  #   cmd = format("gcloud iam service-accounts keys create ~/key%s.json --iam-account %s@%s.iam.gserviceaccount.com",GcpConfig.config[:hab_container_service_account_name],GcpConfig.config[:hab_container_service_account_name],GcpConfig.config[:gcp_project_id])
+  #   sh(cmd)
+  #   puts "Now run: docker login -u _json_key --password-stdin https://gcr.io < ~/key#{GcpConfig.config[:hab_container_service_account_name]}.json"
+  # end
 
   task :cleanup_integration_tests do
     puts "----> Cleanup"

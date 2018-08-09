@@ -24,8 +24,8 @@ module GcpConfig
       :gcp_kube_nodepool_name => "default-pool",
       :hab_container_service_account_name => "hab-svc-acct-#{(0...15).map { (65 + rand(26)).chr }.join.downcase}",
       # when set to 1 this will create the service account in addition to the kube cluster
-      # making configurable since we only need it once
-      :create_habitat_service_account => 1
+      # making configurable - not created by default
+      :create_habitat_service_account => 0
   }
 
   def self.config

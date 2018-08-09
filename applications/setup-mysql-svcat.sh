@@ -13,6 +13,9 @@ SVC_ACCT_NAME=${GCP_SVC_ACCT:="mysql-service-account-${RANDOM}"}
 INSTANCE_NAME=${GCP_INST_NAME:="cloudsql-instance"}
 INSTANCE_ID=${GCP_INST_ID:="gke-demo-mysql-${RANDOM}"}
 CREDENTIALS_NAME=${GCP_CREDS_NAME:="cloudsql-credentials"}
+# below are only used to create a sample manifest file
+APP_IMAGE_NAME=${APP_IMAGE_NAME:="eu.gcr.io/spaterson-project/table-setting:latest"}
+APP_NAME=${APP_NAME:="table-setting"}
 
 kubectl create namespace ${NAMESPACE}
 svcat provision ${INSTANCE_NAME} \
@@ -72,7 +75,73 @@ spec:
 EOF
 
 # use the above manifest file to finish creating the deployment
-kubectl create -f ${SCRIPT_DIR}/cloudsql-binding.yaml
+kubectl create -f ${SCRIPT_DIR}/cloudsql-binding.yml
 #wait until the binding is ready
 until svcat get binding --namespace cloud-mysql cloudsql-binding | grep Ready; do sleep 5; echo 'Pending Cloud SQL Instance Binding Ready state...'; done
-# TODO - create a demo app that uses the above
+# the below is created for convenience, assuming that the Table Setting app is being used e.g.
+# https://github.com/skpaterson/table-setting
+# this is only created as a sample for convenience and not executed anywhere
+cat <<EOF > ${SCRIPT_DIR}/sample-deployment.yml
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: ${APP_NAME}
+  namespace:  ${NAMESPACE}
+  labels:
+    app: ${APP_NAME}
+spec:
+  selector:
+    matchLabels:
+      app: ${APP_NAME}
+  template:
+    metadata:
+      labels:
+        app: ${APP_NAME}
+    spec:
+      containers:
+        - name: web
+          image: ${APP_IMAGE_NAME}
+          ports:
+            - containerPort: 5000
+          env:
+            - name: DB_TYPE
+              value: mysql
+        - name: cloudsql-proxy
+          image: gcr.io/cloudsql-docker/gce-proxy:1.11
+          env:
+            - name: CONNECTION_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: ${CREDENTIALS_NAME}
+                  key: connectionName
+          command: ["/cloud_sql_proxy",
+                    "-instances=$(CONNECTION_NAME)=tcp:3306",
+                    "-credential_file=/secrets/cloudsql/privateKeyData"]
+          volumeMounts:
+            - name: ${SVC_ACCT_NAME}
+              mountPath: /secrets/cloudsql
+              readOnly: true
+      volumes:
+        - name: ${SVC_ACCT_NAME}
+          secret:
+            secretName: ${SVC_ACCT_NAME}
+        - name: cloudsql
+          emptyDir:
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloudsql-user-service
+  namespace: ${NAMESPACE}
+  labels:
+    app: ${APP_NAME}
+spec:
+  selector:
+    app: ${APP_NAME}
+  ports:
+  - port: 80
+    targetPort: 5000
+  type: LoadBalancer
+EOF
+

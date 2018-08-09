@@ -85,9 +85,9 @@ $ export GCP_KUBE_CLUSTER_ZONE_EXTRA2="europe-west1-c"
 ```
 Choose a zone where there are enough IP addresses available (9 are required and some zones default to 8).  Navigate to  IAM and admin->Quotas and look for “Compute Engine API In-use IP addresses” to update this for a zone.
 
-Optionally disable creating the service account for working with the container registry that could be used by Habitat Builder.  This is created by default:
+Optionally enable creating a service account for working with the container registry that could be used by Habitat Builders.  This is not created by default:
 ```
-$ export CREATE_HABITAT_SERVICE_ACCOUNT=0
+$ export CREATE_HABITAT_SERVICE_ACCOUNT=1
 ```
 
 Initialize the terraform workspace:
@@ -214,6 +214,90 @@ $ kubectl get services front
 NAME      TYPE           CLUSTER-IP     EXTERNAL-IP      PORT(S)          AGE
 front     LoadBalancer   10.20.300.40   12.345.678.123   8000:32259/TCP   1m
 ```
+
+## Advanced example - run a more realistic application
+
+Here we will deploy a separate application [Table Setting](https://github.com/skpaterson/table-setting) using a Cloud SQL database based on the [Kubernetes samples](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/blob/master/service-catalog/cloud-sql-mysql/README.md). 
+
+First some preparatory work is required.  Assuming that the `setup_cluster` phase above was successful, we already have a GCP Service Broker in place.  This can be confirmed with the below command:
+
+```
+$ svcat get plans
+  NAME             CLASS                      DESCRIPTION
++------+---------------------------+--------------------------------+
+  beta   cloud-spanner               Cloud Spanner plan for the
+                                     Beta release of the Google
+                                     Cloud Platform Service Broker
+  beta   cloud-iam-service-account   A Google Cloud Platform IAM
+                                     service account
+  beta   cloud-pubsub                Pub/Sub plan for the Beta
+                                     release of the Google Cloud
+                                     Platform Service Broker
+  beta   cloud-sql-mysql             Cloud SQL - MySQL plan for
+                                     the Beta release of the Google
+                                     Cloud Platform Service Broker
+  beta   bigquery                    BigQuery plan for the Beta
+                                     release of the Google Cloud
+                                     Platform Service Broker
+  beta   cloud-bigtable              Bigtable plan for the Beta
+                                     release of the Google Cloud
+                                     Platform Service Broker
+  beta   cloud-storage               Google Cloud Storage plan for
+                                     the Beta release of the Google
+                                     Cloud Platform Service Broker
+```
+
+Now we must build an image of our application to deploy (assumes Habitat is installed/configured):
+
+```
+$ git clone https://github.com/skpaterson/table-setting
+$ cd table-setting
+$ hab studio enter
+[STUDIO] build
+[STUDIO] hab pkg export docker $(ls -1t results/*.hart | head -1)
+```
+
+Upload your built image to [Google Container Registry](https://cloud.google.com/container-registry/):
+
+```bash
+# assumes docker and gcloud are installed locally, your repo URL will depend on your project name
+$ gcloud auth configure-docker
+$ docker tag habskp/table-setting:latest eu.gcr.io/spaterson-project/table-setting:latest
+$ docker push eu.gcr.io/spaterson-project/table-setting:latest
+```
+
+Now we can provision the Cloud SQL database and generate a manifest for our application:
+
+```
+$ export APP_IMAGE_NAME=<YOUR APP IMAGE NAME e.g. "eu.gcr.io/spaterson-project/table-setting:latest">
+# from the root of the repository
+$ ./applications/setup-mysql-svcat.sh
+```
+
+After some time, the MySQL DB will be available, along with a manifest in the applications directory.  This is what will be used to run on our cluster.  Deploy the application via:
+
+```bash
+$ kubectl create -f applications/sample-deployment.yml
+deployment "table-setting" created
+service "cloudsql-user-service" created
+```
+
+As in the previous example, we wait until an external IP address is assigned:
+ 
+```bash
+$ kubectl get service cloudsql-user-service --namespace cloud-mysql
+NAME                    TYPE           CLUSTER-IP      EXTERNAL-IP    PORT(S)        AGE
+cloudsql-user-service   LoadBalancer   10.51.247.227   35.123.84.130   80:30712/TCP   2m
+```
+
+Navigate to the external IP address  and you should see the Table Setting UI!
+
+To clean up, run:
+
+```bash
+$ kubectl delete -f applications/sample-deployment.yml
+```
+
 
 ## Clean everything up 
 
