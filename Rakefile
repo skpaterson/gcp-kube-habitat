@@ -105,7 +105,7 @@ namespace :test do
     puts "----> Cluster ready."
   end
 
-  desc "Perform Integration Tests Without Cluster Configuration"
+  desc "Setup Cluster Without Cleanup"
   task :integration do
     Rake::Task["test:init_workspace"].execute
     if File.exists?(File.join(integration_dir,"build",variable_file_name))
@@ -114,7 +114,8 @@ namespace :test do
     Rake::Task["test:plan_integration_tests"].execute
     Rake::Task["test:setup_integration_tests"].execute
     Rake::Task["test:run_integration_tests"].execute
-    Rake::Task["test:cleanup_integration_tests"].execute
+    Rake::Task["test:setup_cluster"].execute
+    #Rake::Task["test:cleanup_integration_tests"].execute
   end
 end
 
