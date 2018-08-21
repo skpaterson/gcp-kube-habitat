@@ -1,13 +1,14 @@
 # Habitat and Kubernetes on GCP (Google Cloud Platform)
 
-This project is geared towards getting started quickly with Kubernetes and Habitat on GCP and follows 
-similar steps to this [AKS and ACR Walkthrough](https://www.habitat.sh/blog/2018/05/aks-and-acr-walkthrough/).  In a GCP project, this:
+This project is geared towards getting started quickly with Kubernetes and Habitat on GCP and provides a few example application deployments for reference.  In a GCP project, this:
 - Creates a GKE container cluster
 - Optionally creates a service account with privileges to push and pull images to the [Container Registry](https://cloud.google.com/container-registry/docs/)
 - Uses [InSpec GCP](https://github.com/inspec/inspec-gcp) to test that the resources were created as expected, see [controls](controls)
 - Configures kubectl command line tool
+- Installs [Helm](https://github.com/helm/helm/blob/master/docs/install.md) to the Kubernetes cluster
 - Installs [Habitat Operator](https://github.com/habitat-sh/habitat-operator) to the Kubernetes cluster 
-- Provides examples to quickly do something real in the cluster
+- Installs [Service Catalog](https://cloud.google.com/kubernetes-engine/docs/how-to/add-on/service-catalog/install-service-catalog) and adds the [GCP Broker](https://cloud.google.com/kubernetes-engine/docs/how-to/add-on/service-catalog/install-service-catalog) to the Kubernetes cluster
+- Provides three examples to quickly do something real using the cluster
 
 ## Prerequisites
 
