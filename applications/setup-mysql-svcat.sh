@@ -58,7 +58,7 @@ kubectl delete namespace ${NAMESPACE}
 EOF
 
 # create the binding for the secret
-cat <<EOF > ${SCRIPT_DIR}/cloudsql-binding.yaml
+cat <<EOF > ${SCRIPT_DIR}/cloudsql-binding.yml
 apiVersion: servicecatalog.k8s.io/v1beta1
 kind: ServiceBinding
 metadata:
@@ -115,7 +115,7 @@ spec:
                   name: ${CREDENTIALS_NAME}
                   key: connectionName
           command: ["/cloud_sql_proxy",
-                    "-instances=$(CONNECTION_NAME)=tcp:3306",
+                    "-instances=\$(CONNECTION_NAME)=tcp:3306",
                     "-credential_file=/secrets/cloudsql/privateKeyData"]
           volumeMounts:
             - name: ${SVC_ACCT_NAME}

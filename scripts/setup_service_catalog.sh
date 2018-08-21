@@ -13,10 +13,15 @@ helm install svc-cat/catalog --name catalog --namespace catalog --set asyncBindi
  #   -- wait \
  #   --set apiserver.storage.etcd.persistence.enabled=true
 #https://cloud.google.com/kubernetes-engine/docs/how-to/add-on/service-catalog/install-service-catalog
+sc remove-gcp-broker
 sc add-gcp-broker
 # note the above call can take time...
+
+#monitor broker for Fetched Catalog state
+until kubectl get clusterservicebrokers -o 'custom-columns=BROKER:.metadata.name,STATUS:.status.conditions[0].reason' | grep FetchedCatalog; do sleep 5; echo 'Waiting for Service Broker to be ready'; done
+
 svcat get plans
-until svcat get plans | grep NAME; do sleep 5; echo 'Waiting for GCP broker to be ready ...'; done
+until svcat get plans | grep NAME; do sleep 5; echo 'Waiting for GCP plans to be available ...'; done
 
 # Grant the Owner role (roles/owner) to the cloudservices service account so that the service account can
 # grant IAM permissions. Service Broker grants IAM permissions as part of binding to the service instances.

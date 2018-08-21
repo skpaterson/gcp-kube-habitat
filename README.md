@@ -68,6 +68,7 @@ Dependency check passed. You are good to go.
 
 9. Install the Service Catalog CLI, see: [here](https://github.com/kubernetes-incubator/service-catalog/blob/master/docs/install.md#installing-the-service-catalog-cli)
 
+10. Install Helm - see instructions [here](https://github.com/helm/helm/blob/master/docs/install.md)
 
 ## Create the resources
 
@@ -177,7 +178,7 @@ $ kubectl cluster-info
 $ kubectl get pods
 ```
 
-## Run an example application directly using Kubernetes
+## Example 1 - run an application directly using Kubernetes
 
 This is based on the Kubernetes example [here](https://kubernetes.io/docs/tasks/run-application/)
 
@@ -190,7 +191,7 @@ $ kubectl describe services nginx-service
 ```
 Using the public IP address from the last command, hit the URL and the trusty nginx startup page should be there. 
 
-## Run a simple Habitat example application
+## Example 2 - run a simple Habitat example application
 
 This example is based on [this article](https://kinvolk.io/blog/2017/12/get-started-with-habitat-on-kubernetes/). 
 
@@ -215,7 +216,7 @@ NAME      TYPE           CLUSTER-IP     EXTERNAL-IP      PORT(S)          AGE
 front     LoadBalancer   10.20.300.40   12.345.678.123   8000:32259/TCP   1m
 ```
 
-## Advanced example - run a more realistic application
+## Example 3 - run a more realistic application (advanced)
 
 Here we will deploy a separate application [Table Setting](https://github.com/skpaterson/table-setting) using a Cloud SQL database based on the [Kubernetes samples](https://github.com/GoogleCloudPlatform/kubernetes-engine-samples/blob/master/service-catalog/cloud-sql-mysql/README.md). 
 
@@ -270,7 +271,7 @@ Now we can provision the Cloud SQL database and generate a manifest for our appl
 
 ```
 $ export APP_IMAGE_NAME=<YOUR APP IMAGE NAME e.g. "eu.gcr.io/spaterson-project/table-setting:latest">
-# from the root of the repository
+# from the root of this repository (gcp-kube-habitat)
 $ ./applications/setup-mysql-svcat.sh
 ```
 
