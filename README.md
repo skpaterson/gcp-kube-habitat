@@ -167,11 +167,22 @@ Test Summary: 22 successful, 0 failures, 0 skipped
 
 ## Set up the Kubernetes Cluster
 
-The following command configures kubectl and installs the Habitat Operator in the Kubernetes cluster.
+To set up the cluster run the following command:
+
 ```
 $ bundle exec rake test:setup_cluster
 ```
+
 Note this operation is not idempotent!
+
+Under the hood, what's happening here is:
+* Cluster credentials are retrieved, `kubectl` is configured  
+* Set the current user as administrator in the cluster
+* Helm is set up for the cluster
+* Habitat is installed using Helm
+* Service Catalog and GCP Broker are installed using Helm and `sc`
+
+For more information see the `Rakefile` and scripts directory. 
 
 Check things are working as expected via:
 ```
