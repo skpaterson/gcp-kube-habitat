@@ -267,7 +267,8 @@ $ git clone https://github.com/skpaterson/table-setting
 $ cd table-setting
 $ hab studio enter
 [STUDIO] build
-[STUDIO] hab pkg export docker $(ls -1t results/*.hart | head -1)
+[STUDIO] source results/last_build.env
+[STUDIO] hab pkg export docker "results/${pkg_artifact}"
 ```
 
 Upload your built image to [Google Container Registry](https://cloud.google.com/container-registry/):
