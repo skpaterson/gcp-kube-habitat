@@ -102,7 +102,11 @@ namespace :test do
     puts "----> Setting up Service Catalog and GCP Broker ..."
     setup_osb = File.join(File.dirname(__FILE__),'scripts','setup_service_catalog.sh')
     sh(setup_osb)
-    puts "----> Cluster ready."
+    puts '----> Cluster automated setup finished. Run the following commands interactively to complete setup:'
+    puts 'sc add-gcp-broker'
+    puts 'export GCP_PROJECT_ID=$(gcloud config get-value project)'
+    puts 'export GCP_PROJECT_NUMBER=$(gcloud projects describe $GCP_PROJECT_ID --format=\'value(projectNumber)\')'
+    puts 'gcloud projects add-iam-policy-binding ${GCP_PROJECT_ID} --member serviceAccount:${GCP_PROJECT_NUMBER}@cloudservices.gserviceaccount.com --role=roles/owner'
   end
 
   desc "Setup Cluster Without Cleanup"
